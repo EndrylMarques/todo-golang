@@ -1,17 +1,20 @@
 package route
 
 import (
+	"github.com/gorilla/mux"
 	"net/http"
 
 	"eddy.com/todo/handler"
 )
 
 func RegisterRoute() http.Handler {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", handler.Health)
-	mux.HandleFunc("/todo/get", handler.GetTodo)
-	mux.HandleFunc("/todo/add", handler.InsertTodo)
-	mux.HandleFunc("/todo/set-finished", handler.SetoTodoFinishd)
+	r := mux.NewRouter()
+	r.HandleFunc("/", handler.Health).Methods("GET")
+	r.HandleFunc("/todo", handler.GetAll).Methods("GET")
+	r.HandleFunc("/todo", handler.Insert).Methods("POST")
+	r.HandleFunc("/todo", handler.Update).Methods("PUT")
+	r.HandleFunc("/todo", handler.Delete).Methods("DELETE")
+	r.HandleFunc("/todo/set-finished", handler.SetFinished).Methods("PUT")
 
-	return mux
+	return r
 }
